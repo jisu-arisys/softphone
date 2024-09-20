@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang='ko'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>Arisys Softphone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<style>
+</style>
+
+<body style="margin:100px">
+<span th:text="${message}">Hello, World!</span>
+
+    <div class="container-fluid py-0">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="accordion" id="accordionExample">
+                    <!-- Agent Active Section -->
+                    <div class="input-group mb-3">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Agent Active
+                        </button>
+                        <div id="collapseOne" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <span id="profileIds"></span>
+                                <input type="text" id="extension" placeholder="내선번호를 입력하세요" value=""
+                                       class="form-control input-sm">
+                                <button class="btn btn-primary" id="download-logs-button">Download Logs</button>
+                                <button class="btn btn-primary" id="agent-activate">활성화</button>
+                                <button class="btn btn-light" id="agent-deactivate" disabled>비활성화</button><br>
+                                <span id="agentInfo"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Agent Status Section -->
+                    <div class="input-group mb-3">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Agent Status
+                        </button>
+                        <div id="collapseTwo" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <div class="col-10">
+                                    <label for="ex2">notready-reason</label>
+                                    <select id="notready-reason" name="selectbox" onchange="" class="form-select w-50">
+                                        <option value="11">점심</option>
+                                        <option value="12">회의</option>
+                                        <option value="13">교육</option>
+                                        <option value="14">휴식</option>
+                                        <option value="14">기타</option>
+                                    </select>
+                                </div>
+                                <br>
+                                <button class="btn btn-primary" id="agent-login" disabled>로그인</button>
+                                <button class="btn btn-light" id="agent-logout" disabled>로그아웃</button>
+                                <button class="btn btn-success" id="agent-goready" disabled>Ready</button>
+                                <button class="btn btn-light" id="agent-gonotready" disabled>Not ready</button>
+                                <button class="btn btn-light" id="agent-goACW" disabled>후처리</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Make Call Section -->
+                    <div class="input-group mb-3">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Make Call
+                        </button>
+                        <div id="collapseThree" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <label for="ex2">destination</label>
+                                <input type="text" id="dn" placeholder="전화번호를 입력하세요" value=""
+                                    class="form-control input-sm">
+                                <br>
+                                <button class="btn btn-secondary" id="make-call">Make Call</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Call Control Section -->
+                    <div class="input-group mb-3">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Call Control
+                        </button>
+                        <div id="collapseFour" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <label for="ex2">Call List</label>
+                                <select id="callId" name="selectbox" onchange="" class="form-select w-50">
+                                </select>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label for="ex2">action to</label>
+                                        <input type="text" id="remoteAddr" placeholder="action to" value=""
+                                            class="form-control input-sm" disabled>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="ex2">uui</label>
+                                        <input type="text" id="uui" placeholder="전달메시지: 96byte이내, 한글사용금지" value=""
+                                            class="form-control input-sm" disabled>
+                                    </div>
+                                </div>
+                                <br>
+                                <button class="btn btn-secondary" id="accept" disabled>Accept</button>
+                                <button class="btn btn-secondary" id="end" disabled>End</button>
+                                <button class="btn btn-secondary" id="release" disabled>release</button>
+                                <button class="btn btn-secondary" id="hold" disabled>hold</button>
+                                <button class="btn btn-secondary" id="unhold" disabled>unhold</button>
+                                <button class="btn btn-secondary" id="blindTransfer" disabled>blindTransfer</button>
+                                <button class="btn btn-secondary" id="transfer" disabled>transefer</button>
+                                <button class="btn btn-secondary" id="conference" disabled>conference</button>
+                                <button class="btn btn-secondary" id="completeTransfer" disabled>completeTransfer</button>
+                                <button class="btn btn-secondary" id="completeConference" disabled>completeConference</button>
+                                <button class="btn btn-secondary" id="getCalls" disabled>getCalls</button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="col-md-6">
+                    <!-- 기본 사용자 정보 -->
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            User Session Info
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="defaultProfileId">Profile Id : </li>
+                            <li class="list-group-item" id="userName">User Name : </li>
+                            <li class="list-group-item" id="userRole">User Role : </li>
+                            <li class="list-group-item" id="defaultExtension">Default Extension : </li>
+                            <li class="list-group-item" id="sessionId">Session Id : </li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <!-- 활성화된 상담원 정보 -->
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            Agent Info
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="agentId">Agent Id : </li>
+                            <li class="list-group-item" id="agentName">Agent Name : </li>
+                            <li class="list-group-item" id="agentRole">Agent Role : </li>
+                            <li class="list-group-item" id="agentStatus">Agent Status : </li>
+                            <li class="list-group-item" id="agentExtension">Extension : </li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <!--info card-->
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            Call Info
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="callIdInfo">Call Id : </li>
+                            <li class="list-group-item" id="contactIdInfo">Contact Id : </li>
+                            <li class="list-group-item" id="callTypeInfo">Call Type : </li>
+                            <li class="list-group-item" id="callStateInfo">Call State : </li>
+                            <li class="list-group-item" id="directionInfo">Direction : </li>
+                            <li class="list-group-item" id="uuiInfo">UUI : </li>
+                            <li class="list-group-item" id="partyInfo">particapants : </li>
+                            <li class="list-group-item" id="originatedInfo">Originated : </li>
+                            <li class="list-group-item" id="destinationInfo">Destination : </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="app/modules/sdk.js"></script>
+    <script type="module" src="app/modules/Configuration.js"></script>
+    <script type="module" src="app/modules/ClientSessionManager.js"></script>
+    <script type="module" src="app/modules/AgentManager.js"></script>
+<script type="module" src="app/modules/WorkManager.js"></script>
+    <script type="module" src="app/Softphone.js"></script>
+    <script type="module" src="app/app_sample_ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
